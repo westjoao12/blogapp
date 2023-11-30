@@ -1,0 +1,20 @@
+<h2>Lista de Postagens:</h2>
+<hr>
+<a href="/admin/postagens/add"><button class="btn btn-success">Nova Postagem</button></a>
+
+{{#each postagens}}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{{titulo}}</h5>
+            <p class="card-text">Descrição: {{descricao}}</p>
+            <small>Data: {{data}}</small><br>
+            <small>Categoria: {{categoria.nome}}</small><br>
+            <a href="/admin/postagens/edit/{{_id}}"><button class="btn btn-success mt-3">Editar Postagens</button></a>
+            
+            <a href="#" class="btn btn-danger mt-3" onclick="return confirm('Deseja realmente excluir a postagem?') ? window.
+            location.href='/admin/postagens/delete/{{_id}}' : false;">Excluir postagem</a>
+        </div>
+    </div>
+{{else}}
+    <h2 class="mt-4">Sem categorias!</h2>
+{{/each}}
