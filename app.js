@@ -4,6 +4,7 @@
     const bodyParser = require("body-parser");
     const app =express()
     const admin = require('./routes/admin')
+    const usuarios = require('./routes/usuario')
     const path =require('path')
     const mongoose = require('mongoose')
     const session = require('express-session')
@@ -51,6 +52,7 @@
     
 //Rotas
     app.use('/admin', admin)
+    app.use('/usuarios', usuarios)
     app.get("/", (req, res)=> {
         Postagem.find().populate('categoria').sort({data: "desc"}).lean().then((postagens)=>{
             res.render('index', {postagens: postagens})
