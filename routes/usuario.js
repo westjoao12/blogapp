@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 require('../models/Usuario')
 const Usuario = mongoose.model('usuarios')
 const bcrypt = require('bcryptjs')
+const passport = require("passport")
 
 router.get('/registro', (req, res)=>{
     res.render('usuarios/registro')
@@ -66,5 +67,50 @@ router.post('/registro', (req, res)=>{
 router.get('/login', (req, res)=>{
     res.render('usuarios/login')
 })
+
+router.post('/login', (req, res, next) =>{
+    passport.authenticate("local", {
+        successRedirect:"/",
+        failureRedirect:"/usuarios/login",
+        failureFlash:true
+    })(req, res, next)
+});
+
+
+/*
+router.post('/login',(req, res, next) =>{
+    //isso é para validar os dados de entrada
+    //console.log(req.body);
+    //return;
+    //aqui vamos usar a função require da lib bcryptjs que iremos instalar no próximo passo
+    //para comparar as senhas
+    //req.body.senha é a senha digitada pelo user e password é a nossa coluna na tabela users~
+    //comparando se elas são iguais
+    //se sim, logamos ele no sistema
+    //se não mostramos uma mensagem de erro
+    const password = req.body.senha;
+    const email = req.body.email;
+    Usuario.findOne({email:email}).then((user)=>{
+        if(!user) {
+            req.flash('error_msg','Usuário não encontrado!');
+            return res.redirect('/usuarios/login');
+            }
+            bcrypt.compare(password, user.senha).then((result)=>{
+                if (!result) {
+                    req.flash('error_msg','Senha incorreta!');
+                    return res.redirect('/usuarios/login');
+                }
+                req.session.userId= user._id;//guarda o id do usuario logado em uma sessão
+                req.flash("success_msg", "Logado com Sucesso!");
+                res.redirect("/");
+            }).catch((err)=> {
+                return next(err);
+            });
+        }, (erro)=> {
+            req.flash('error_msg', 'Houve um erro ao logar!');
+            return res.redirect('/usuarios/login');
+    })
+});
+*/
 
 module.exports= router
