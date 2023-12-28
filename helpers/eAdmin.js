@@ -1,7 +1,6 @@
 module.exports ={
     eAdmin: function(req, res, next){
         if (req.isAuthenticated() && req.user.eAdmin == 1)return next();
-        //console.log('Requisitante não é administrador');
         req.flash("error_msg", "Acesso negado!");
         res.redirect("/");
         },
