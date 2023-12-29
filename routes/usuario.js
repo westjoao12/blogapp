@@ -77,11 +77,14 @@ router.post('/login', (req, res, next) =>{
 });
 
 router.get('/logout', (req, res)=>{
-    req.logout((err)=>{
+    /*req.logout((err)=>{
         if(err)return next(err);
     req.flash('success_msg','Deslogado com Sucesso!')
     res.redirect("/")
-    });
+    });*/
+    req.logOut();
+    req.flash('success_msg','Deslogado com Sucesso!')
+    res.redirect("/")
 })
 
 /*

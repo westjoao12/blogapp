@@ -39,7 +39,7 @@
         app.use(bodyParser.urlencoded({extended:true}))
         app.use(bodyParser.json())
     //Handlebars
-        app.engine('handlebars', handlebars.engine({defaultLayout: 'main',
+        app.engine('handlebars', handlebars({defaultLayout: 'main',
             runtimeOptions:{
                 allowProtoPropertiesByDefault: true,
                 allowProtoMethodsByDefault:true
@@ -47,7 +47,7 @@
         }))
         app.set('view engine', 'handlebars')
     //Mongoose
-    mongoose.connect("mongodb://localhost:27017/blogapp").then(()=>{
+    mongoose.connect("mongodb://localhost:27017/blogapp", {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
         console.log('Conectado ao MongoDB')
     }).catch((err)=>{
         console.log('Erro ao se conectar: ', err)
@@ -82,7 +82,7 @@
         })
     })
     app.get('/categorias', (req, res)=>{
-        Categoria.find().then((categorias)=>{
+        Categoria.find().lean().then((categorias)=>{
             res.render('categorias/index', {categorias: categorias})
         }).catch((err)=>{
             req.flash('error_msg','Houve um erro interno!')
@@ -115,7 +115,7 @@
     })
     
 //Outros
-const PORT = 8081
+const PORT = process.env.PORT || 8081
 app.listen(PORT, ()=>{
     console.log("Servidor rodado")
 })
